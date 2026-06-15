@@ -1,81 +1,131 @@
 """
 delta/merger.py
 
-Merge adjacent delta regions into larger logical regions.
+Merge adjacent regions into larger contiguous regions.
 
-A region is merged when the byte gap between consecutive
-regions is <= max_gap.
-
-Example
-
-Region A : 0x1000 - 0x1040
-Gap      : 3 bytes
-Region B : 0x1044 - 0x1080
-
-Result
-
-Region : 0x1000 - 0x1080
+Two neighbouring regions are merged when the byte gap between
+them is less than or equal to the configured merge threshold.
 """
+
+from __future__ import annotations
+
+from configs.config import MERGE_MAX_GAP
 
 from delta.region import DeltaRegion
 
+from core.logger import (
+    section,
+    kv,
+)
+
 
 class DeltaMerger:
+    """
+    Merge neighbouring regions into larger contiguous regions.
+    """
 
-    def __init__(self, max_gap: int = 8):
-        self.max_gap = max_gap
+    def __init__(self, max_gap: int | None = None) -> None:
 
-    def merge(self, regions):
+        self.max_gap = (
+            MERGE_MAX_GAP
+            if max_gap is None
+            else max_gap
+        )
+
+    def merge(
+        self,
+        regions: list[DeltaRegion]
+    ) -> list[DeltaRegion]:
 
         if not regions:
             return []
 
-        # Ensure regions are sorted
-        regions = sorted(regions, key=lambda r: r.start)
-
-        merged = []
-
-        current = DeltaRegion(
-            start=regions[0].start,
-            end=regions[0].end
+        ordered = sorted(
+            regions,
+            key=lambda region: region.start
         )
 
-        for region in regions[1:]:
+        merged: list[DeltaRegion] = []
+
+        current = DeltaRegion(
+            start=ordered[0].start,
+            end=ordered[0].end,
+        )
+
+        for region in ordered[1:]:
 
             gap = region.start - current.end - 1
 
             if gap <= self.max_gap:
-                # Extend current region
-                current.end = max(current.end, region.end)
+
+                current.end = max(
+                    current.end,
+                    region.end,
+                )
+
             else:
+
                 merged.append(current)
 
                 current = DeltaRegion(
                     start=region.start,
-                    end=region.end
+                    end=region.end,
                 )
 
         merged.append(current)
 
         return merged
 
-    def statistics(self, before, after):
+    def statistics(
+        self,
+        before: list[DeltaRegion],
+        after: list[DeltaRegion],
+    ) -> dict:
+        """
+        Generate and display merge statistics.
 
-        print()
-        print("=" * 60)
-        print("REGION MERGER")
-        print("=" * 60)
+        Returns
+        -------
+        dict
+            Dictionary containing merge statistics.
+        """
 
-        print(f"Original Regions : {len(before)}")
-        print(f"Merged Regions   : {len(after)}")
-        print(f"Reduction        : {len(before) - len(after)}")
+        original_count = len(before)
+        merged_count = len(after)
 
-        if len(before):
-            reduction = (
-                (len(before) - len(after))
-                / len(before)
-            ) * 100
+        reduction = original_count - merged_count
 
-            print(f"Reduction %      : {reduction:.1f}%")
+        reduction_pct = (
+            (reduction / original_count) * 100.0
+            if original_count
+            else 0.0
+        )
 
-        print("=" * 60)
+        average_length = (
+            sum(region.length for region in after) / merged_count
+            if merged_count
+            else 0.0
+        )
+
+        stats = {
+            "merge_gap": self.max_gap,
+            "original_regions": original_count,
+            "merged_regions": merged_count,
+            "reduction": reduction,
+            "reduction_pct": reduction_pct,
+            "average_region_length": average_length,
+        }
+
+        section("REGION MERGER")
+
+        kv("Merge Gap", f"{stats['merge_gap']} bytes")
+        kv("Original Regions", stats["original_regions"])
+        kv("Merged Regions", stats["merged_regions"])
+        kv("Reduction", stats["reduction"])
+        kv("Reduction %", f"{stats['reduction_pct']:.1f}%")
+        kv(
+            "Average Region Length",
+            f"{stats['average_region_length']:.1f} bytes",
+        )
+
+        return stats

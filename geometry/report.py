@@ -1,73 +1,155 @@
+"""
+geometry/report.py
+
+Geometry analysis reporting.
+"""
+
+from __future__ import annotations
+
+from collections import Counter
+
+from configs.config import MAX_REPORT_CANDIDATES
+
+from core.logger import (
+    section,
+    kv,
+    info,
+)
+
+
 class GeometryReport:
+    """
+    Report geometry analysis statistics.
+    """
 
-    def print(self, tables):
+    def print(self, tables: list[dict]) -> dict:
 
-        print()
-        print("=" * 60)
-        print("GEOMETRY ANALYSIS")
-        print("=" * 60)
+        total = len(tables)
 
-        if not tables:
-            print("Candidates        : 0")
-            print("Valid Tables      : 0")
-            print("Rejected          : 0")
-            print("=" * 60)
-            return
+        if total == 0:
+
+            summary = {
+                "total": 0,
+                "valid": 0,
+                "rejected": 0,
+                "average_score": 0.0,
+            }
+
+            section("GEOMETRY ANALYSIS")
+
+            kv("Candidates", 0)
+            kv("Valid Tables", 0)
+            kv("Rejected", 0)
+
+            return summary
+
+        # ------------------------------------------------------
+        # Statistics
+        # ------------------------------------------------------
 
         valid = sum(
-            1 for table in tables
+            1
+            for table in tables
             if table.get("valid", False)
         )
 
-        rejected = len(tables) - valid
+        rejected = total - valid
 
         average_score = (
             sum(
                 table.get("score", 0)
                 for table in tables
-            ) / len(tables)
+            )
+            / total
         )
 
-        print(f"Candidates        : {len(tables)}")
-        print(f"Valid Tables      : {valid}")
-        print(f"Rejected          : {rejected}")
-        print(f"Average Score     : {average_score:.1f}")
+        summary = {
+            "total": total,
+            "valid": valid,
+            "rejected": rejected,
+            "average_score": average_score,
+        }
 
-        print()
-        print("Detected Shapes")
-        print("-" * 60)
+        # ------------------------------------------------------
+        # Main Summary
+        # ------------------------------------------------------
 
-        shape_count = {}
+        section("GEOMETRY ANALYSIS")
+
+        kv("Candidates", total)
+        kv("Valid Tables", valid)
+        kv("Rejected", rejected)
+        kv("Average Score", f"{average_score:.1f}")
+
+        # ------------------------------------------------------
+        # Shape Distribution
+        # ------------------------------------------------------
+
+        shape_counter = Counter()
 
         for table in tables:
 
-            rows, cols = table.get("shape", (0, 0))
-
-            key = f"{rows} x {cols}"
-
-            shape_count[key] = shape_count.get(key, 0) + 1
-
-        for shape in sorted(shape_count.keys()):
-            print(f"{shape:<12} : {shape_count[shape]}")
-
-        print()
-        print("Top Candidates")
-        print("-" * 60)
-
-        sorted_tables = sorted(
-            tables,
-            key=lambda item: item.get("score", 0),
-            reverse=True
-        )
-
-        for index, table in enumerate(sorted_tables[:5], start=1):
-
-            rows, cols = table.get("shape", (0, 0))
-
-            print(
-                f"[{index}] "
-                f"{rows}x{cols:<4} "
-                f"Score: {table.get('score', 0):>3}"
+            rows, cols = table.get(
+                "shape",
+                (0, 0)
             )
 
-        print("=" * 60)
+            shape_counter[f"{rows} x {cols}"] += 1
+
+        if shape_counter:
+
+            section("DETECTED SHAPES")
+
+            for shape, count in sorted(shape_counter.items()):
+
+                kv(shape, count)
+
+        # ------------------------------------------------------
+        # Top Candidates
+        # ------------------------------------------------------
+
+        ranked = sorted(
+            tables,
+            key=lambda table: table.get(
+                "score",
+                0
+            ),
+            reverse=True,
+        )
+
+        if ranked:
+
+            section("TOP GEOMETRY CANDIDATES")
+
+            for index, table in enumerate(
+                ranked[:MAX_REPORT_CANDIDATES],
+                start=1,
+            ):
+
+                rows, cols = table.get(
+                    "shape",
+                    (0, 0)
+                )
+
+                region = table.get("region")
+
+                if region:
+
+                    location = (
+                        f"0x{region.start:08X}"
+                        f"-"
+                        f"0x{region.end:08X}"
+                    )
+
+                else:
+
+                    location = "Unknown"
+
+                info(
+                    f"[{index}] "
+                    f"{rows:>2}x{cols:<2} | "
+                    f"Score={table.get('score', 0):>3} | "
+                    f"{location}"
+                )
+
+        return summary

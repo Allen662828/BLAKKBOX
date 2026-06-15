@@ -1,29 +1,81 @@
-class ClassificationReport:
+"""
+classification/report.py
 
-    def print(self, regions):
+Region classification reporting.
+"""
+
+from __future__ import annotations
+
+from core.logger import (
+    section,
+    kv,
+)
+
+
+class ClassificationReport:
+    """
+    Report classification statistics.
+    """
+
+    def print(self, regions) -> dict:
 
         calibration = 0
         unknown = 0
         small = 0
 
+        total_confidence = 0.0
+
         for region in regions:
 
-            if region.region_type == "CALIBRATION":
+            total_confidence += getattr(
+                region,
+                "confidence",
+                0.0
+            )
+
+            region_type = getattr(
+                region,
+                "region_type",
+                "UNKNOWN"
+            )
+
+            if region_type == "CALIBRATION":
+
                 calibration += 1
 
-            elif region.region_type == "SMALL_EDIT":
+            elif region_type == "SMALL_EDIT":
+
                 small += 1
 
             else:
+
                 unknown += 1
 
-        print()
-        print("=" * 60)
-        print("REGION CLASSIFICATION")
-        print("=" * 60)
+        total = len(regions)
 
-        print(f"Calibration Regions : {calibration}")
-        print(f"Unknown Regions     : {unknown}")
-        print(f"Small Regions       : {small}")
+        average_confidence = (
+            total_confidence / total
+            if total
+            else 0.0
+        )
 
-        print("=" * 60)
+        summary = {
+            "total": total,
+            "calibration": calibration,
+            "unknown": unknown,
+            "small": small,
+            "average_confidence": average_confidence,
+        }
+
+        section("REGION CLASSIFICATION")
+
+        kv("Total Regions", summary["total"])
+        kv("Calibration Regions", summary["calibration"])
+        kv("Unknown Regions", summary["unknown"])
+        kv("Small Regions", summary["small"])
+        kv(
+            "Average Confidence",
+            f"{summary['average_confidence']:.2f}"
+        )
+
+        return summary
