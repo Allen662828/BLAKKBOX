@@ -7,104 +7,66 @@ from classification.classifier import RegionClassifier
 from classification.report import ClassificationReport
 
 from axis.detector import AxisDetector
+from geometry.detector import GeometryDetector
 
 
 class Pipeline:
     """
-    BLAKKBOX DENSO Studio Main Pipeline
+    Generic Binary Analysis Pipeline
 
-        Load ROMs
-            │
+        Load
+          │
         Validation
-            │
+          │
         Fingerprint
-            │
+          │
         Delta Analysis
-            │
+          │
         Region Classification
-            │
-        Axis Detection
-            │
-        Map Detection
-            │
-        Engineering Validation
-            │
-        Delta Filtering
-            │
-        Export Report
+          │
+        Structural Analysis
+          │
+        Geometry Analysis
+          │
+        Report
     """
 
     def __init__(self):
-
-        # ----------------------------------------------------------
-        # Core Modules
-        # ----------------------------------------------------------
 
         self.loader = RomLoader()
         self.validator = Validator()
         self.fingerprint = FingerprintEngine()
 
-        # ----------------------------------------------------------
-        # Delta Engine
-        # ----------------------------------------------------------
-
         self.delta = DeltaEngine()
-
-        # ----------------------------------------------------------
-        # Region Classification
-        # ----------------------------------------------------------
 
         self.classifier = RegionClassifier()
         self.classification_report = ClassificationReport()
 
-        # ----------------------------------------------------------
-        # Axis Detection
-        # ----------------------------------------------------------
-
         self.axis = AxisDetector()
+        self.geometry = GeometryDetector()
 
-    def execute(self, original_file: str, mod_file: str):
+    def execute(self, original_file: str, modified_file: str):
 
-        print("\nLoading ROM files...\n")
+        print("\nLoading files...\n")
 
-        # ==========================================================
-        # LOAD ROMS
-        # ==========================================================
-
-        original, mod = self.loader.load(
+        original, modified = self.loader.load(
             original_file,
-            mod_file
+            modified_file
         )
-
-        # ==========================================================
-        # VALIDATION
-        # ==========================================================
 
         self.validator.validate(
             original,
-            mod
+            modified
         )
-
-        # ==========================================================
-        # ROM FINGERPRINT
-        # ==========================================================
 
         self.fingerprint.analyze(
             original
         )
 
-        # ==========================================================
-        # DELTA ANALYSIS
-        # ==========================================================
-
         regions = self.delta.analyze(
             original,
-            mod
+            modified
         )
-
-        # ==========================================================
-        # REGION CLASSIFICATION
-        # ==========================================================
 
         regions = self.classifier.classify(
             regions
@@ -114,42 +76,18 @@ class Pipeline:
             regions
         )
 
-        # ==========================================================
-        # AXIS DETECTION
-        # ==========================================================
-
-        axis_candidates = self.axis.analyze(
+        structural_candidates = self.axis.analyze(
+            original,
             regions
         )
 
-        # ==========================================================
-        # FUTURE PIPELINE STAGES
-        # ==========================================================
-
-        stages = [
-            "Map Detection",
-            "Engineering Validation",
-            "Delta Filtering",
-            "Export Report"
+        structural_candidates = [
+            c for c in structural_candidates
+            if c.get("valid", False)
         ]
 
-        print()
-
-        for index, stage in enumerate(stages, start=1):
-            print(f"[{index}/{len(stages)}] {stage}")
-
-        # ==========================================================
-        # SUMMARY
-        # ==========================================================
-
-        calibration = sum(
-            1 for r in regions
-            if getattr(r, "calibration", False)
-        )
-
-        valid_axis = sum(
-            1 for c in axis_candidates
-            if c["valid"]
+        geometry_candidates = self.geometry.analyze(
+            structural_candidates
         )
 
         print()
@@ -157,12 +95,18 @@ class Pipeline:
         print("PIPELINE SUMMARY")
         print("=" * 60)
 
-        print(f"Original Size            : {len(original):,} bytes")
-        print(f"Modified Size            : {len(mod):,} bytes")
-        print(f"Modified Regions         : {len(regions)}")
-        print(f"Calibration Candidates   : {calibration}")
-        print(f"Valid Axis Candidates    : {valid_axis}")
+        print(f"Original Size        : {len(original):,} bytes")
+        print(f"Modified Size        : {len(modified):,} bytes")
+        print(f"Modified Regions     : {len(regions)}")
+        print(f"Structural Candidates: {len(structural_candidates)}")
+        print(f"Geometry Candidates  : {len(geometry_candidates)}")
 
         print("=" * 60)
-        print("Pipeline Complete")
+        print("Analysis Complete")
         print("=" * 60)
+
+        return {
+            "regions": regions,
+            "structures": structural_candidates,
+            "geometry": geometry_candidates,
+        }

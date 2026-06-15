@@ -13,7 +13,26 @@ class AxisDetector:
         self.confidence = AxisConfidence()
         self.report = AxisReport()
 
-    def analyze(self, regions):
+    def extract_values(self, rom: bytes, region):
+
+        """
+        Extract raw bytes from the candidate region.
+
+        For now we treat every byte as an unsigned value.
+        Later this can be upgraded to support:
+            - 8-bit
+            - 16-bit Big Endian
+            - 16-bit Little Endian
+            - Float
+            - Signed values
+        """
+
+        start = region.start
+        end = region.end + 1
+
+        return list(rom[start:end])
+
+    def analyze(self, rom: bytes, regions):
 
         candidates = []
 
@@ -22,19 +41,31 @@ class AxisDetector:
             if not getattr(region, "calibration", False):
                 continue
 
-            # Placeholder: replace with extracted axis values
-            values = [0, 10, 20, 30, 40]
+            values = self.extract_values(
+                rom,
+                region
+            )
 
-            mono = self.monotonic.analyze(values)
-            cont = self.continuity.analyze(values)
+            if len(values) < 4:
+                continue
 
-            score = self.confidence.score(mono, cont)
+            monotonic = self.monotonic.analyze(values)
 
-            candidates.append({
-                "region": region,
-                "valid": score >= 70,
-                "score": score
-            })
+            continuity = self.continuity.analyze(values)
+
+            score = self.confidence.score(
+                monotonic,
+                continuity
+            )
+
+            candidates.append(
+                {
+                    "region": region,
+                    "values": values,
+                    "score": score,
+                    "valid": score >= 70
+                }
+            )
 
         self.report.print(candidates)
 
