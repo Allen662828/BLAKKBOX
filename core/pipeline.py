@@ -98,9 +98,7 @@ class Pipeline:
         # Fingerprint
         # ------------------------------------------------------
 
-        fingerprint = self.fingerprint.analyze(
-            original
-        )
+        fingerprint = self.fingerprint.analyze(original)
 
         # ------------------------------------------------------
         # Delta Analysis
@@ -115,15 +113,9 @@ class Pipeline:
         # Region Classification
         # ------------------------------------------------------
 
-        regions = self.classifier.classify(
-            regions
-        )
+        regions = self.classifier.classify(regions)
 
-        classification_summary = (
-            self.classification_report.print(
-                regions
-            )
-        )
+        classification_summary = self.classification_report.print(regions)
 
         # ------------------------------------------------------
         # Axis Analysis
@@ -147,9 +139,7 @@ class Pipeline:
         # Geometry Analysis
         # ------------------------------------------------------
 
-        geometry_candidates = self.geometry.analyze(
-            valid_axis
-        )
+        geometry_candidates = self.geometry.analyze(valid_axis)
 
         valid_geometry = [
             table
@@ -214,18 +204,11 @@ class Pipeline:
         # ------------------------------------------------------
 
         return {
-
             "fingerprint": fingerprint,
-
             "regions": regions,
-
             "classification": classification_summary,
-
             "axis": axis_candidates,
-
             "valid_axis": valid_axis,
-
             "geometry": geometry_candidates,
-
             "valid_geometry": valid_geometry,
         }

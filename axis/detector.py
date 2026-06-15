@@ -14,7 +14,6 @@ class AxisDetector:
         self.report = AxisReport()
 
     def extract_values(self, rom: bytes, region):
-
         """
         Extract raw bytes from the candidate region.
 
@@ -41,10 +40,7 @@ class AxisDetector:
             if not getattr(region, "calibration", False):
                 continue
 
-            values = self.extract_values(
-                rom,
-                region
-            )
+            values = self.extract_values(rom, region)
 
             if len(values) < 4:
                 continue
@@ -53,17 +49,14 @@ class AxisDetector:
 
             continuity = self.continuity.analyze(values)
 
-            score = self.confidence.score(
-                monotonic,
-                continuity
-            )
+            score = self.confidence.score(monotonic, continuity)
 
             candidates.append(
                 {
                     "region": region,
                     "values": values,
                     "score": score,
-                    "valid": score >= 70
+                    "valid": score >= 70,
                 }
             )
 

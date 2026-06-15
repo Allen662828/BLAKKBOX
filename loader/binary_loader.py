@@ -8,8 +8,6 @@ class BinaryLoader:
         path = Path(filename)
 
         if not path.exists():
-            raise FileNotFoundError(
-                f"ROM file not found: {filename}"
-            )
+            raise FileNotFoundError(f"ROM file not found: {filename}")
 
         return path.read_bytes()

@@ -33,14 +33,8 @@ class DeltaReport:
 
             average = changed_bytes / regions
 
-            kv(
-                "Average Region Size",
-                f"{average:.1f} bytes"
-            )
+            kv("Average Region Size", f"{average:.1f} bytes")
 
         else:
 
-            kv(
-                "Average Region Size",
-                "0 bytes"
-            )
+            kv("Average Region Size", "0 bytes")

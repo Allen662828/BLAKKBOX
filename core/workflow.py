@@ -12,10 +12,7 @@ class Workflow:
         print("BLAKKBOX DENSO STUDIO")
         print("=" * 60)
 
-        self.pipeline.execute(
-            "ORIGINAL.bin",
-            "MOD.bin"
-        )
+        self.pipeline.execute("ORIGINAL.bin", "MOD.bin")
 
         print("=" * 60)
         print("Workflow Finished")

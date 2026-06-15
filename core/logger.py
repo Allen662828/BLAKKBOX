@@ -50,6 +50,7 @@ logger = Logger.get()
 # Convenience wrappers
 # ----------------------------------------------------------
 
+
 def info(message: str) -> None:
     logger.info(message)
 
@@ -74,6 +75,7 @@ def critical(message: str) -> None:
 # Section Header
 # ----------------------------------------------------------
 
+
 def section(title: str) -> None:
 
     logger.info("=" * 60)
@@ -84,6 +86,7 @@ def section(title: str) -> None:
 # ----------------------------------------------------------
 # Key / Value output
 # ----------------------------------------------------------
+
 
 def kv(key: str, value) -> None:
 

@@ -7,6 +7,7 @@ Geometry analysis reporting.
 from __future__ import annotations
 
 from collections import Counter
+from typing import Any
 
 from configs.config import MAX_REPORT_CANDIDATES
 
@@ -19,12 +20,21 @@ from core.logger import (
 
 class GeometryReport:
     """
-    Report geometry analysis statistics.
+    Reports geometry analysis statistics.
     """
 
-    def print(self, tables: list[dict]) -> dict:
+    def print(
+        self,
+        tables: list[dict[str, Any]],
+    ) -> dict[str, int | float]:
+
+        summary: dict[str, int | float]
 
         total = len(tables)
+
+        # ------------------------------------------------------
+        # Empty Result
+        # ------------------------------------------------------
 
         if total == 0:
 
@@ -40,6 +50,7 @@ class GeometryReport:
             kv("Candidates", 0)
             kv("Valid Tables", 0)
             kv("Rejected", 0)
+            kv("Average Score", "0.0")
 
             return summary
 
@@ -47,21 +58,11 @@ class GeometryReport:
         # Statistics
         # ------------------------------------------------------
 
-        valid = sum(
-            1
-            for table in tables
-            if table.get("valid", False)
-        )
+        valid = sum(1 for table in tables if table.get("valid", False))
 
         rejected = total - valid
 
-        average_score = (
-            sum(
-                table.get("score", 0)
-                for table in tables
-            )
-            / total
-        )
+        average_score = sum(float(table.get("score", 0)) for table in tables) / total
 
         summary = {
             "total": total,
@@ -71,7 +72,7 @@ class GeometryReport:
         }
 
         # ------------------------------------------------------
-        # Main Summary
+        # Report Summary
         # ------------------------------------------------------
 
         section("GEOMETRY ANALYSIS")
@@ -85,13 +86,13 @@ class GeometryReport:
         # Shape Distribution
         # ------------------------------------------------------
 
-        shape_counter = Counter()
+        shape_counter: Counter[str] = Counter()
 
         for table in tables:
 
             rows, cols = table.get(
                 "shape",
-                (0, 0)
+                (0, 0),
             )
 
             shape_counter[f"{rows} x {cols}"] += 1
@@ -110,10 +111,7 @@ class GeometryReport:
 
         ranked = sorted(
             tables,
-            key=lambda table: table.get(
-                "score",
-                0
-            ),
+            key=lambda table: float(table.get("score", 0)),
             reverse=True,
         )
 
@@ -128,18 +126,14 @@ class GeometryReport:
 
                 rows, cols = table.get(
                     "shape",
-                    (0, 0)
+                    (0, 0),
                 )
 
                 region = table.get("region")
 
-                if region:
+                if region is not None:
 
-                    location = (
-                        f"0x{region.start:08X}"
-                        f"-"
-                        f"0x{region.end:08X}"
-                    )
+                    location = f"0x{region.start:08X}" f"-" f"0x{region.end:08X}"
 
                 else:
 

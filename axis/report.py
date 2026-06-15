@@ -23,19 +23,12 @@ class AxisReport:
 
         total = len(candidates)
 
-        valid = sum(
-            1
-            for candidate in candidates
-            if candidate.get("valid", False)
-        )
+        valid = sum(1 for candidate in candidates if candidate.get("valid", False))
 
         rejected = total - valid
 
         average_score = (
-            sum(
-                candidate.get("score", 0)
-                for candidate in candidates
-            ) / total
+            sum(candidate.get("score", 0) for candidate in candidates) / total
             if total
             else 0.0
         )
@@ -52,10 +45,7 @@ class AxisReport:
         kv("Candidates", summary["total"])
         kv("Valid Axis", summary["valid"])
         kv("Rejected", summary["rejected"])
-        kv(
-            "Average Score",
-            f"{summary['average_score']:.1f}"
-        )
+        kv("Average Score", f"{summary['average_score']:.1f}")
 
         if total:
 
@@ -63,10 +53,7 @@ class AxisReport:
 
             ranked = sorted(
                 candidates,
-                key=lambda candidate: candidate.get(
-                    "score",
-                    0
-                ),
+                key=lambda candidate: candidate.get("score", 0),
                 reverse=True,
             )
 

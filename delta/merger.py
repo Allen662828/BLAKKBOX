@@ -26,24 +26,14 @@ class DeltaMerger:
 
     def __init__(self, max_gap: int | None = None) -> None:
 
-        self.max_gap = (
-            MERGE_MAX_GAP
-            if max_gap is None
-            else max_gap
-        )
+        self.max_gap = MERGE_MAX_GAP if max_gap is None else max_gap
 
-    def merge(
-        self,
-        regions: list[DeltaRegion]
-    ) -> list[DeltaRegion]:
+    def merge(self, regions: list[DeltaRegion]) -> list[DeltaRegion]:
 
         if not regions:
             return []
 
-        ordered = sorted(
-            regions,
-            key=lambda region: region.start
-        )
+        ordered = sorted(regions, key=lambda region: region.start)
 
         merged: list[DeltaRegion] = []
 
@@ -95,11 +85,7 @@ class DeltaMerger:
 
         reduction = original_count - merged_count
 
-        reduction_pct = (
-            (reduction / original_count) * 100.0
-            if original_count
-            else 0.0
-        )
+        reduction_pct = (reduction / original_count) * 100.0 if original_count else 0.0
 
         average_length = (
             sum(region.length for region in after) / merged_count

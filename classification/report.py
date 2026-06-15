@@ -27,17 +27,9 @@ class ClassificationReport:
 
         for region in regions:
 
-            total_confidence += getattr(
-                region,
-                "confidence",
-                0.0
-            )
+            total_confidence += getattr(region, "confidence", 0.0)
 
-            region_type = getattr(
-                region,
-                "region_type",
-                "UNKNOWN"
-            )
+            region_type = getattr(region, "region_type", "UNKNOWN")
 
             if region_type == "CALIBRATION":
 
@@ -53,11 +45,7 @@ class ClassificationReport:
 
         total = len(regions)
 
-        average_confidence = (
-            total_confidence / total
-            if total
-            else 0.0
-        )
+        average_confidence = total_confidence / total if total else 0.0
 
         summary = {
             "total": total,
@@ -73,9 +61,6 @@ class ClassificationReport:
         kv("Calibration Regions", summary["calibration"])
         kv("Unknown Regions", summary["unknown"])
         kv("Small Regions", summary["small"])
-        kv(
-            "Average Confidence",
-            f"{summary['average_confidence']:.2f}"
-        )
+        kv("Average Confidence", f"{summary['average_confidence']:.2f}")
 
         return summary

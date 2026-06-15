@@ -3,91 +3,83 @@ configs/config.py
 
 BLAKKBOX Global Configuration
 
-Central location for all configurable values used throughout
-the analysis pipeline.
+Central location for all configurable values used
+throughout the analysis pipeline.
 """
+
+from __future__ import annotations
+
+from typing import Any
 
 # ==========================================================
 # Project
 # ==========================================================
 
-PROJECT_NAME = "BLAKKBOX"
-PROJECT_VERSION = "0.4.0-dev"
+PROJECT_NAME: str = "BLAKKBOX"
+PROJECT_VERSION: str = "0.4.0-dev"
 
 # ==========================================================
 # Delta
 # ==========================================================
 
-# Maximum number of bytes allowed between two adjacent regions
-# before they are considered separate regions.
-MERGE_MAX_GAP = 8
+MERGE_MAX_GAP: int = 8
 
 # ==========================================================
 # Region Classification
 # ==========================================================
 
-# Minimum region size to be considered a large structural region.
-CLASSIFICATION_MIN_LENGTH = 64
+CLASSIFICATION_MIN_LENGTH: int = 64
+UNKNOWN_MIN_LENGTH: int = 16
 
-# Minimum region size for an unknown candidate.
-UNKNOWN_MIN_LENGTH = 16
-
-# Classification confidence values.
-CALIBRATION_CONFIDENCE = 0.60
-UNKNOWN_CONFIDENCE = 0.30
-SMALL_EDIT_CONFIDENCE = 0.10
+CALIBRATION_CONFIDENCE: float = 0.60
+UNKNOWN_CONFIDENCE: float = 0.30
+SMALL_EDIT_CONFIDENCE: float = 0.10
 
 # ==========================================================
 # Axis Analysis
 # ==========================================================
 
-# Sliding window length used when scanning for monotonic sequences.
-AXIS_WINDOW = 8
-
-# Minimum score required for a valid structural candidate.
-AXIS_MIN_SCORE = 70
+AXIS_WINDOW: int = 8
+AXIS_MIN_SCORE: int = 70
 
 # ==========================================================
 # Geometry Analysis
 # ==========================================================
 
-# Minimum geometry score required for a valid structure.
-GEOMETRY_MIN_SCORE = 70
+GEOMETRY_MIN_SCORE: int = 70
 
-# Expected structural limits.
-MIN_ROWS = 2
-MIN_COLUMNS = 2
+MIN_ROWS: int = 2
+MIN_COLUMNS: int = 2
 
-MAX_ROWS = 64
-MAX_COLUMNS = 64
+MAX_ROWS: int = 64
+MAX_COLUMNS: int = 64
 
 # ==========================================================
 # Reporting
 # ==========================================================
 
-# Maximum number of candidates displayed in reports.
-MAX_REPORT_CANDIDATES = 5
+MAX_REPORT_CANDIDATES: int = 5
 
 # ==========================================================
 # Logging
 # ==========================================================
 
-LOG_LEVEL = "INFO"
+LOG_LEVEL: str = "INFO"
 
 # ==========================================================
 # Future Configuration
 # ==========================================================
 
-ENABLE_DEBUG = False
-ENABLE_TIMING = True
-ENABLE_STATISTICS = True
+ENABLE_DEBUG: bool = False
+ENABLE_TIMING: bool = True
+ENABLE_STATISTICS: bool = True
 
-SAVE_REPORTS = True
-EXPORT_JSON = False
-EXPORT_CSV = False
+SAVE_REPORTS: bool = True
+EXPORT_JSON: bool = False
+EXPORT_CSV: bool = False
 
 # ==========================================================
 # Reserved
 # ==========================================================
 
-RESERVED = {}
+RESERVED: dict[str, Any] = {}

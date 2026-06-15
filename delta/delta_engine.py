@@ -40,46 +40,32 @@ class DeltaEngine:
         # BYTE COMPARISON
         # ==========================================================
 
-        offsets = self.extractor.extract(
-            original,
-            mod
-        )
+        offsets = self.extractor.extract(original, mod)
 
         # ==========================================================
         # INITIAL REGION CLUSTERING
         # ==========================================================
 
-        regions = self.cluster.cluster(
-            offsets
-        )
+        regions = self.cluster.cluster(offsets)
 
         # ==========================================================
         # SMART REGION MERGING
         # ==========================================================
 
-        merged_regions = self.merger.merge(
-            regions
-        )
+        merged_regions = self.merger.merge(regions)
 
-        self.merger.statistics(
-            regions,
-            merged_regions
-        )
+        self.merger.statistics(regions, merged_regions)
 
         # ==========================================================
         # DELTA STATISTICS
         # ==========================================================
 
-        stats = self.statistics.summarize(
-            merged_regions
-        )
+        stats = self.statistics.summarize(merged_regions)
 
         # ==========================================================
         # REPORT
         # ==========================================================
 
-        self.report.print(
-            stats
-        )
+        self.report.print(stats)
 
         return merged_regions

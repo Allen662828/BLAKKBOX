@@ -50,28 +50,19 @@ class Validator:
 
         for validator in self.validators:
 
-            result = validator.validate(
-                original,
-                modified
-            )
+            result = validator.validate(original, modified)
 
             if result.passed:
 
                 passed += 1
 
-                info(
-                    f"[PASS] {result.name:<24} "
-                    f"{result.message}"
-                )
+                info(f"[PASS] {result.name:<24} " f"{result.message}")
 
             else:
 
                 failed += 1
 
-                error(
-                    f"[FAIL] {result.name:<24} "
-                    f"{result.message}"
-                )
+                error(f"[FAIL] {result.name:<24} " f"{result.message}")
 
                 raise RuntimeError(result.message)
 

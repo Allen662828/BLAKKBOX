@@ -29,17 +29,11 @@ class GeometryDetector:
 
             interpolation = self.interpolation.analyze(region)
 
-            score = self.confidence.score(
-                rectangle,
-                interpolation
-            )
+            score = self.confidence.score(rectangle, interpolation)
 
-            tables.append({
-                "region": region,
-                "shape": shape,
-                "score": score,
-                "valid": score >= 70
-            })
+            tables.append(
+                {"region": region, "shape": shape, "score": score, "valid": score >= 70}
+            )
 
         self.report.print(tables)
 

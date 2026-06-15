@@ -17,5 +17,5 @@ class StructureClassifier:
             "region": candidate["region"],
             "shape": (rows, cols),
             "structure": structure,
-            "confidence": candidate.get("score", 0)
+            "confidence": candidate.get("score", 0),
         }
