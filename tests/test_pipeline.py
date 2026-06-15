@@ -5,7 +5,10 @@ tests/test_pipeline.py
 from core.pipeline import Pipeline
 
 
-def test_pipeline_creation():
+def test_pipeline_creation() -> None:
+    """
+    Verify the Pipeline initializes all required components.
+    """
 
     pipeline = Pipeline()
 
