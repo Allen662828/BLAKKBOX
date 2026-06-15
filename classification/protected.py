@@ -1,0 +1,2 @@
+class ProtectedClassifier:
+    pass
