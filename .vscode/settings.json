@@ -1,19 +1,27 @@
+```json
 {
+    // ------------------------------------------------------------------
+    // Appearance
+    // ------------------------------------------------------------------
     "workbench.colorTheme": "Dark Modern",
-
     "workbench.startupEditor": "none",
     "workbench.welcome.enabled": false,
     "workbench.tips.enabled": false,
     "window.commandCenter": false,
     "window.restoreWindows": "all",
 
+    // ------------------------------------------------------------------
+    // Updates / Telemetry
+    // ------------------------------------------------------------------
     "update.showReleaseNotes": false,
     "extensions.ignoreRecommendations": true,
     "extensions.autoCheckUpdates": false,
     "extensions.autoUpdate": false,
-
     "telemetry.telemetryLevel": "off",
 
+    // ------------------------------------------------------------------
+    // Editor
+    // ------------------------------------------------------------------
     "workbench.editor.enablePreview": false,
     "workbench.editor.enablePreviewFromQuickOpen": false,
 
@@ -36,9 +44,15 @@
 
     "breadcrumbs.enabled": false,
 
+    // ------------------------------------------------------------------
+    // Explorer
+    // ------------------------------------------------------------------
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
 
+    // ------------------------------------------------------------------
+    // Files
+    // ------------------------------------------------------------------
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
     "files.trimTrailingWhitespace": true,
@@ -74,13 +88,26 @@
     "search.followSymlinks": false,
     "search.useIgnoreFiles": true,
 
+    // ------------------------------------------------------------------
+    // Git
+    // ------------------------------------------------------------------
     "git.autofetch": true,
     "git.confirmSync": false,
     "git.enableSmartCommit": true,
 
+    // ------------------------------------------------------------------
+    // Terminal
+    // ------------------------------------------------------------------
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "terminal.integrated.enableMultiLinePasteWarning": "never",
     "terminal.integrated.scrollback": 10000,
+
+    // ------------------------------------------------------------------
+    // Python
+    // ------------------------------------------------------------------
+    "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    "python.createEnvironment.trigger": "off",
 
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.autoImportCompletions": true,
@@ -92,13 +119,23 @@
         "editor.formatOnSave": true
     },
 
+    // ------------------------------------------------------------------
+    // Ruff
+    // ------------------------------------------------------------------
     "ruff.enable": true,
     "ruff.organizeImports": true,
 
+    // ------------------------------------------------------------------
+    // Security
+    // ------------------------------------------------------------------
     "security.workspace.trust.untrustedFiles": "open",
 
+    // ------------------------------------------------------------------
+    // Disable Build Tool Auto Detection
+    // ------------------------------------------------------------------
     "grunt.autoDetect": "off",
     "gulp.autoDetect": "off",
     "jake.autoDetect": "off",
     "npm.autoDetect": "off"
 }
+```
