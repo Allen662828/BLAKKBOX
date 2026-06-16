@@ -1,0 +1,20 @@
+# Protected areas must remain unchanged.
+# This file defines policy. ECU-family-specific address ranges can be added later.
+
+global_rules:
+  preserve_mod_zero: true
+  prevent_new_regions: true
+  preserve_file_size: true
+  preserve_oem_layout: true
+  preserve_untouched_bytes: true
+
+blocked_types:
+  - executable_code
+  - interrupt_vectors
+  - egr_maps
+  - egr_system_tables
+  - dtc_tables
+  - diagnostic_routines
+  - switch_masks
+
+families: {}

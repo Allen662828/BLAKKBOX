@@ -1,0 +1,22 @@
+# BLAKKBOX filtered-delta processing rules
+# Only offsets already modified in MOD are eligible.
+
+delta_rules:
+  small_delta:
+    range: [0, 5]
+    action: keep
+
+  medium_delta:
+    range: [5, 8]
+    multiplier: 0.80
+
+  large_delta:
+    range: [8, null]
+    multiplier: 0.55
+
+protection:
+  preserve_mod_zero: true
+  prevent_new_regions: true
+  preserve_original_size: true
+  preserve_oem_layout: true
+  preserve_untouched_bytes: true
