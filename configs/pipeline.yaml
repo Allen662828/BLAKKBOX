@@ -1,0 +1,17 @@
+# BLAKKBOX v2 pipeline settings
+# Defaults preserve the Universal DENSO ROM Enhancement Workflow.
+
+delta:
+  small_max: 5
+  medium_max: 8
+  medium_multiplier: 0.80
+  large_multiplier: 0.55
+  preserve_mod_zero: true
+
+export:
+  enhanced_name: enhanced.bin
+  json_report_name: analysis.json
+  markdown_report_name: analysis.md
+  manifest_name: manifest.json
+  write_markdown: true
+  write_manifest: true

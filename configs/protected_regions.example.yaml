@@ -1,0 +1,9 @@
+# Optional ECU-family protected address ranges.
+# Keep this as an example; create your private protected_regions.yaml locally.
+# Do not publish proprietary address maps.
+
+ranges:
+  # Example only - replace with your own legally sourced ranges.
+  # - start: 0x00000000
+  #   end:   0x00003FFF
+  #   label: interrupt_vectors_or_boot_code

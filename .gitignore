@@ -1,31 +1,55 @@
-# ROM / ECU binaries
+# ==========================================================
+# BLAKKBOX repository safety
+# Do not commit customer ROMs, ECU dumps, or generated outputs.
+# ==========================================================
+
+# ROM / ECU binaries and dumps
 *.bin
 *.ori
 *.mod
 *.hex
 *.s19
+*.srec
 *.mot
 *.frf
 *.sgm
 *.dump
+*.read
+*.write
+*.kess
+*.ktag
+*.cmd
+*.bcm
 
-# Job files
+# Private job data
 jobs/
 input/
 output/
-reports/
 artifacts/
+reports/
+*.bak
+*.backup
 
-# Python
+# Python environments and caches
 .venv/
 venv/
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 .pytest_cache/
-.mypy_cache/
 .ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
 
 # IDE / OS
 .vscode/*.log
+.idea/
 .DS_Store
 Thumbs.db
