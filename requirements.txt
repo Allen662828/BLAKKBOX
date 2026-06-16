@@ -1,0 +1,11 @@
+PySide6
+openai
+GitPython
+loguru
+pydantic
+PyYAML
+python-dotenv
+pyqtgraph
+pytest
+ruff
+mypy
