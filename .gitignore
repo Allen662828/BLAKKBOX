@@ -1,25 +1,31 @@
-```gitignore
+# ROM / ECU binaries
+*.bin
+*.ori
+*.mod
+*.hex
+*.s19
+*.mot
+*.frf
+*.sgm
+*.dump
+
+# Job files
+jobs/
+input/
+output/
+reports/
+artifacts/
+
 # Python
 .venv/
 venv/
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-
-# Python caches
 .pytest_cache/
-.ruff_cache/
 .mypy_cache/
+.ruff_cache/
 
-# VS Code logs
+# IDE / OS
 .vscode/*.log
-
-# Build / Output
-output/
-reports/
-
-# Operating System
-Thumbs.db
 .DS_Store
-```
+Thumbs.db
