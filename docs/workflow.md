@@ -1,6 +1,26 @@
-# BLAKKBOX Universal DENSO ROM Enhancement Workflow v3
+# BLAKKBOX Universal DENSO ROM Enhancement Workflow v3.1
 
 This document is the active BLAKKBOX processing system for DENSO ROM enhancement tasks.
+
+## Git-connected source of truth
+
+This workflow is connected to GitHub and should be treated as the active repository-backed system source unless the user specifies another repo.
+
+```text
+Repository: Allen662828/BLAKKBOX
+Branch: main
+Workflow path: docs/workflow.md
+System name: BLAKKBOX Universal DENSO ROM Enhancement Workflow
+Version: v3.1
+```
+
+Git operating rules:
+
+1. Keep `docs/workflow.md` as the primary human-readable system entry.
+2. Keep the workflow safety rules in sync with any implementation code, pipeline configuration, or README updates.
+3. Do not commit customer BIN files, private ECU files, license keys, credentials, or personal client data.
+4. Store only safe workflow documentation, templates, scripts, validation logic, and non-private examples in Git.
+5. For future BLAKKBOX DENSO ROM tasks, use this Git-backed workflow as the active rule source unless a newer workflow file is explicitly provided.
 
 ## Core formula
 
